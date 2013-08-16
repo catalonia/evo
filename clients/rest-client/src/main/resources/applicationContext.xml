@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:oxm="http://www.springframework.org/schema/oxm"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd 
+			http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm-3.0.xsd">
+
+	<context:component-scan base-package="com.evon.restservice.client" />
+	
+	<!-- bean id="articleClient" class="com.informit.articleservice.client.ArticleClient">
+        <constructor-arg ref="restTemplate"/>
+        <constructor-arg ref="credentials"/>
+    </bean -->
+	
+	<bean id="httpClientParams" class="org.apache.commons.httpclient.params.HttpClientParams">
+        <property name="authenticationPreemptive" value="true"/>
+        <property name="connectionManagerClass"
+                  value="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"/>
+    </bean>
+    <bean id="httpClient" class="org.apache.commons.httpclient.HttpClient">
+        <constructor-arg ref="httpClientParams"/>
+        <!-- property name="state" ref="httpState"/-->
+    </bean>
+    
+    <bean id="httpState" class="com.evon.restservice.client.CustomHttpState">
+    	<property name="credentials" ref="credentials"/>
+	</bean>
+    
+    <bean id="credentials" class="org.apache.commons.httpclient.UsernamePasswordCredentials">
+        <constructor-arg value="storistic-service"/>
+        <constructor-arg value="storistic"/>
+    </bean>
+    <bean id="httpClientFactory" class="org.springframework.http.client.CommonsClientHttpRequestFactory">
+        <constructor-arg ref="httpClient"/>
+    </bean>
+
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<constructor-arg ref="httpClientFactory" />
+		<property name="messageConverters">
+			<list>
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+				
+			</bean>
+				<!-- We only have one message converter for the RestTemplate, namely the XStream Marshller -->
+				<!-- 
+				<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">
+					<constructor-arg>
+						<bean class="org.springframework.oxm.xstream.XStreamMarshaller"> -->
+							<!-- Explicitly define the aliases -->
+							<!--
+							<property name="aliases">
+								<props>
+									<prop key="article">com.informit.articleservice.model.Article</prop>
+									<prop key="category">com.informit.articleservice.model.Category</prop>
+								</props>
+							</property>
+							-->
+							
+							<!-- Tell XStream to find the alias names in the following classes -->
+							<!-- 
+							<property name="annotatedClasses">
+								<list>
+									<value>com.informit.articleservice.model.UserBeans</value>						
+																
+								</list>						
+							</property>
+						</bean>
+					</constructor-arg>
+				</bean> -->
+			</list>
+		</property>
+	</bean>
+
+</beans>
