@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<versions>
+			<version>
+				<no>1</no>
+				<url>http://localhost:8081/RestApplication/rest/</url>
+			</version>
+			
+			<version>
+				<no>2</no>
+				<url>http://localhost:8081/RestApplication1/rest/</url>				
+			</version>
+			
+			
+			<version>
+				<no>3</no>
+				<url>http://localhost:8081/RestApplication2/rest/</url>				
+			</version>
+	
+	</versions>
