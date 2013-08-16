@@ -1,5 +1,11 @@
 package com.evon.restservice.main;
 
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.X509TrustManager;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -13,17 +19,20 @@ public class RestTemplateExample
 	public static ArticleClient articleClient = applicationContext.getBean( "articleClient", ArticleClient.class);
 	public static void main( String[] args )
 	{
-		createRestUser();		
+		//createRestUser();		
 		//getUserById();
 		//updateUser();
-		//deleteUser();
+		deleteUser();		
+		//getOnlineToken();
 		
 	}
 	
-	private static void groponDeals() {
+	
+	
+	private static void getOnlineToken() {
 		// TODO Auto-generated method stub
-		String responce = articleClient.groponDeals("93e9598d1ac2d5eca3017dee020980eb2ad8e87b");
-		System.out.println("gropons deals :::::::-- > "+ responce);
+		Object responce = articleClient.getOnlineToken("sachin12");
+		System.out.println("getOnlineToken :::::::-- > "+ responce);
 		
 	}
 
@@ -55,7 +64,7 @@ public class RestTemplateExample
 	}
 	public static void deleteUser()
 	{
-		String resultStatus=articleClient.deleteUser("18");
+		String resultStatus=articleClient.deleteUser("20");
 		System.out.println("Result in jsopn ::::---"+resultStatus);
 	}
 }
