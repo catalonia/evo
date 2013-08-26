@@ -8,13 +8,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import org.jboss.resteasy.logging.*;
 @Path("/")
 public class RestServices {
 	DbConnection dbConnection=null;
+	Logger log = Logger.getLogger(RestServices.class); 
+	VersionName versionName = new VersionName();
 	@GET
 	@Path("message/{param}")
 	public Response printMessage(@PathParam("param") String msg) {
  
+		log.debug("In getUserById of reast easy VERSION IS == > " +versionName.getVersionName() );
 		String result = "Restful example : " + msg; 
 		dbConnection=new DbConnection();;
 		boolean status=dbConnection.validiateToken(msg);
@@ -27,7 +31,8 @@ public class RestServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createUser(UserBean user) {
 		
-		System.out.println("In Create User");
+		
+		log.debug("In create usere of reast easy VERSION IS == > " +versionName.getVersionName() );
 		dbConnection=new DbConnection();
 		dbConnection.insertUser(user);
 		String result = "sucess";
@@ -40,7 +45,8 @@ public class RestServices {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserById(@QueryParam("userId") int userId) {
 		
-        System.out.println("getUserById ::::---"+ userId);
+       
+        log.debug("In getUserById of reast easy VERSION IS == > " +versionName.getVersionName() );
         dbConnection=new DbConnection();
 		UserBean user =dbConnection.getUserDetail(userId);
 		System.out.println("getUserById ::::---"+ user);
@@ -52,10 +58,10 @@ public class RestServices {
 	@Path("deleteUser")
 	public Response deleteUser(@QueryParam("userId") int userId) {
 		
-        System.out.println("Delete user by id:::-----"+ userId);
+       
+        log.debug("In deleteUser of reast easy VERSION IS == > " +versionName.getVersionName() );
         dbConnection=new DbConnection();
 		String result = dbConnection.deleteUser(userId);
-		 System.out.println("Delete user by id:::-----"+ result);
 		return Response.status(200).entity(result).build();
  
 	}
@@ -64,7 +70,7 @@ public class RestServices {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateUser(UserBean user) {
          
-		 System.out.println("update user :::--------"+user.getUserId());
+		 log.debug("In updateUser of reast easy VERSION IS == > " +versionName.getVersionName() );
          dbConnection=new DbConnection();
 		 String result=dbConnection.updateUser(user);
 		 return Response.status(200).entity(result).build();
