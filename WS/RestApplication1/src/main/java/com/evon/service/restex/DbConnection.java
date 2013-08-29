@@ -17,7 +17,7 @@ public class DbConnection {
 		{
 			
 			Class.forName("com.mysql.jdbc.Driver");		
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restdb","root", "");		
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restdb1","root", "");		
 		}
 		catch(Exception e)
 		{
@@ -30,13 +30,12 @@ public class DbConnection {
 	{
 		System.out.println("insert beansssssss:::::::");
 	    connection=getConnection();
-	    String insertSQL = "INSERT INTO users (FIRST_NAME,MIDDLE_NAME,LAST_NAME) VALUES (?,?,?)";
+	    String insertSQL = "INSERT INTO users (FIRST_NAME,LAST_NAME) VALUES (?,?)";
 	    try 
 	    {
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, user.getFirstName());
-		    preparedStatement.setString(2, user.getMiddleName());
-		    preparedStatement.setString(3, user.getLastName());
+		    preparedStatement.setString(2, user.getLastName());
 		    preparedStatement.executeUpdate();
 		 } 
 	    catch (SQLException e)
@@ -59,7 +58,6 @@ public class DbConnection {
 			while (resultSet.next()) 
 			{
 				user.setFirstName(resultSet.getString("FIRST_NAME"));
-				user.setMiddleName(resultSet.getString("MIDDLE_NAME"));
 				user.setLastName(resultSet.getString("LAST_NAME"));
 				
 			}
@@ -98,7 +96,6 @@ public class DbConnection {
 		// TODO Auto-generated method stub
 		  System.out.println("In update user ---- >"+ user.getUserId());
 		  connection=getConnection();
-		 
 		  try 
 		  {
 			
@@ -106,21 +103,14 @@ public class DbConnection {
 		      String insertSQL = "UPDATE users SET";
 			  String firstName = user.getFirstName();
 			  String lastName = user.getLastName();
-			  String middleName = user.getMiddleName();
-			
+			 	
 			  boolean f_flag = false;
-			  boolean m_flag = false;
 			  boolean l_flag = false;
 			 
 			  if(firstName != null && !firstName.isEmpty())	    		
 			  {
 				  insertSQL += " FIRST_NAME= ?";	
 				  f_flag = true;
-			  }
-			  if(middleName != null && !middleName.isEmpty())	    		
-			  {
-				  insertSQL += ",MIDDLE_NAME=?";		
-				  m_flag = true;
 			  }
 			  if(lastName != null && !lastName.isEmpty())	    		
 			  {
@@ -138,11 +128,7 @@ public class DbConnection {
 				  preparedStatement.setString(index, user.getFirstName()); 
 				  index++;
 			  }
-			  if(m_flag)
-			  {
-				  preparedStatement.setString(index, user.getMiddleName());
-				  index++;
-			  }
+			 
 			  if(l_flag)
 			  {
 				  preparedStatement.setString(index, user.getLastName());

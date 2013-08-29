@@ -17,7 +17,7 @@ public class DbConnection {
 		{
 			
 			Class.forName("com.mysql.jdbc.Driver");		
-			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restdb","root", "");		
+			connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/restdb2","root", "");		
 		}
 		catch(Exception e)
 		{
@@ -30,13 +30,14 @@ public class DbConnection {
 	{
 		System.out.println("insert beansssssss:::::::");
 	    connection=getConnection();
-	    String insertSQL = "INSERT INTO users (FIRST_NAME,MIDDLE_NAME,LAST_NAME) VALUES (?,?,?)";
 	    try 
 	    {
+	    	String insertSQL = "INSERT INTO users (FIRST_NAME,MIDDLE_NAME,LAST_NAME,ADDRESS) VALUES (?,?,?,?)";	    	
 			preparedStatement = connection.prepareStatement(insertSQL);
 			preparedStatement.setString(1, user.getFirstName());
-		    preparedStatement.setString(2, user.getMiddleName());
-		    preparedStatement.setString(3, user.getLastName());
+			preparedStatement.setString(2, user.getMiddleName());
+			preparedStatement.setString(3, user.getLastName());
+			preparedStatement.setString(4, user.getAddress());
 		    preparedStatement.executeUpdate();
 		 } 
 	    catch (SQLException e)
@@ -61,6 +62,7 @@ public class DbConnection {
 				user.setFirstName(resultSet.getString("FIRST_NAME"));
 				user.setMiddleName(resultSet.getString("MIDDLE_NAME"));
 				user.setLastName(resultSet.getString("LAST_NAME"));
+				user.setAddress(resultSet.getString("ADDRESS"));
 				
 			}
 		}
@@ -97,21 +99,18 @@ public class DbConnection {
 	{
 		// TODO Auto-generated method stub
 		  System.out.println("In update user ---- >"+ user.getUserId());
-		  connection=getConnection();
-		 
+		  connection=getConnection();		  
 		  try 
 		  {
-			
-		    /********************** **************************/
-		      String insertSQL = "UPDATE users SET";
+			  String insertSQL = "UPDATE users SET";
 			  String firstName = user.getFirstName();
 			  String lastName = user.getLastName();
 			  String middleName = user.getMiddleName();
-			
+			  String address = user.getAddress();
 			  boolean f_flag = false;
 			  boolean m_flag = false;
 			  boolean l_flag = false;
-			 
+			  boolean a_flag = false;
 			  if(firstName != null && !firstName.isEmpty())	    		
 			  {
 				  insertSQL += " FIRST_NAME= ?";	
@@ -127,7 +126,11 @@ public class DbConnection {
 				  insertSQL += ",LAST_NAME=?";		
 				  l_flag = true;
 			  }
-			  
+			  if(address != null && !address.isEmpty())	    		
+			  {
+				  insertSQL += "ADDRESS = ?";	
+				  a_flag = true ;
+			  }
 			  System.out.println("Query IS == > "+insertSQL);
 			  insertSQL += " WHERE ID = " + user.getUserId();
 			  System.out.println("Query IS == > "+insertSQL);
@@ -148,7 +151,11 @@ public class DbConnection {
 				  preparedStatement.setString(index, user.getLastName());
 				  index++;
 			  }
-			
+			  if(a_flag)
+			  {
+				  preparedStatement.setString(index, user.getAddress());
+			  }	
+			 
 			  preparedStatement.executeUpdate();
 		 } 
 		 catch (SQLException e)
