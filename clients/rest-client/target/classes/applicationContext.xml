@@ -44,6 +44,10 @@
 			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
 				
 			</bean>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				
+			</bean>
+			
 				<!-- We only have one message converter for the RestTemplate, namely the XStream Marshller -->
 				<!-- 
 				<bean class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter">

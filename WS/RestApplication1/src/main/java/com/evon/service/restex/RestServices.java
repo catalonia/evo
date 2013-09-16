@@ -34,9 +34,9 @@ public class RestServices {
 		
 		log.debug("In create usere of reast easy VERSION IS == > " +versionName.getVersionName() );
 		dbConnection=new DbConnection();
-		dbConnection.insertUser(user);
-		String result = "sucess";
-		return Response.status(200).entity(result).build();
+		int userId = dbConnection.insertUser(user);
+		user.setUserId(userId);	
+		return Response.status(200).entity(user).build();
  
 	}
 	
@@ -49,6 +49,7 @@ public class RestServices {
         log.debug("In getUserById of reast easy VERSION IS == > " +versionName.getVersionName() );
         dbConnection=new DbConnection();
 		UserBean user =dbConnection.getUserDetail(userId);
+		user.setUserId(userId);
 		System.out.println("getUserById ::::---"+ user);
 		return Response.status(200).entity(user).build();
  

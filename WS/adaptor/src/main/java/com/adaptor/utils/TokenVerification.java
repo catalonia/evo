@@ -65,4 +65,31 @@ public class TokenVerification {
 		
 	}
 
+
+	public String getDeviceToken(String token) 
+	{
+		// TODO Auto-generated method stub
+		connection = getConnection();
+		String deviceToken = null;
+		String getQuery="SELECT device_token FROM tokens WHERE access_token=?" ;
+		try 
+		{
+			preparedStatement = connection.prepareStatement(getQuery);
+			preparedStatement.setString(1, token);
+			resultSet=preparedStatement.executeQuery();
+			while (resultSet.next()) 
+			{
+				
+				deviceToken = resultSet.getString("device_token");
+											
+			}
+		} 
+		catch (SQLException e)
+		{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		return deviceToken;
+	}
+
 }

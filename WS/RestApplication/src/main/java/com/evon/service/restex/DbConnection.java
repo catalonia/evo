@@ -26,7 +26,7 @@ public class DbConnection {
 		return connection;
 	}
 	
-	public void insertUser(UserBean user)
+	public synchronized int insertUser(UserBean user)
 	{
 		System.out.println("insert beansssssss:::::::");
 	    connection=getConnection();
@@ -45,6 +45,27 @@ public class DbConnection {
 			e.printStackTrace();
 		}
 	  
+	  return getLastId();
+	}
+	public int getLastId()
+	{
+		connection=getConnection();
+		int insertId = 0;
+		try{
+			String query = "SELECT MAX(ID) FROM users";
+			preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();  
+			if (rs.next())  
+			{  
+				insertId = rs.getInt(1);//getLong("last_insert_id()");    
+				System.out.println("LastId::::::::::::::::::  == > "+insertId);
+			}  
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return insertId;
 	}
 	public UserBean getUserDetail(int id)
 	{
@@ -61,7 +82,7 @@ public class DbConnection {
 				user.setFirstName(resultSet.getString("FIRST_NAME"));
 				user.setMiddleName(resultSet.getString("MIDDLE_NAME"));
 				user.setLastName(resultSet.getString("LAST_NAME"));
-				
+				//user.setUserId(resultSet.getInt("ID"));
 			}
 		}
 		catch (SQLException e)
@@ -191,6 +212,31 @@ public class DbConnection {
 		}
 		return false;
 		
+	}
+	public UserBean getAllUserDetail(int id)
+	{
+		System.out.println("get user details--------");
+		connection=getConnection();
+		UserBean user=new UserBean();
+		String getQuery="SELECT * FROM users WHERE ID= " + id;
+		try 
+		{
+			preparedStatement = connection.prepareStatement(getQuery);
+			resultSet=preparedStatement.executeQuery();
+			while (resultSet.next()) 
+			{
+				user.setFirstName(resultSet.getString("FIRST_NAME"));
+				user.setMiddleName(resultSet.getString("MIDDLE_NAME"));
+				user.setLastName(resultSet.getString("LAST_NAME"));
+				
+			}
+		}
+		catch (SQLException e)
+		{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		return user;
 	}
 	
 

@@ -75,17 +75,20 @@ public class ArticleClient
 	
 	private static String createUserUrl = "http://localhost:8081/Adaptor/UserService/createUser";
 	private static String createUserUrl1 = "http://localhost:8081/RestApplication/rest/createUser";
-	private static String getUserByIdUrl = "http://localhost:8081/Adaptor/UserService/getUser?userId={userId}";
+	//private static String getUserByIdUrl = "http://localhost:8081/Adaptor/UserService/getUser?userId={userId}";
+	private static String getUserByIdUrl = "http://localhost:8081/Adaptor/UserService/getUser/{userId}";
 	private static String updateUserUrl = "http://localhost:8081/Adaptor/UserService/updateUser";
-	private static String deleteUrl = "http://localhost:8081/Adaptor/UserService/deleteUser?userId={userId}";
-	private static String getOnlineTokenUrl = "https://localhost:8443/token-generator/rest/getOnlineToken/{param}";
+	//private static String deleteUrl = "http://localhost:8081/Adaptor/UserService/deleteUser?userId={userId}";
+	private static String deleteUrl = "http://localhost:8081/Adaptor/UserService/deleteUser/{userId}";
+	private static String getOnlineTokenUrl = "https://192.168.1.191:8443/token-generator/rest/getOnlineToken/{param}";
+	private static String pushUrl = "http://localhost:8081/Adaptor/UserService/pushServices/{message}";
 	
 	
-	public String createUser(RestUser user)
+	public ApiModel createUser(RestUser user)
 	{
 		System.out.println("create user::::");
 		String versionDate = "2013-06-01";
-		String token  = getOnlineToken("sachin");
+		String token  = getOnlineToken("sachin1");
 		String result = null;
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
         requestHeaders.add("versioDate", versionDate);
@@ -93,12 +96,9 @@ public class ArticleClient
         HttpEntity<RestUser> requestEntity = new HttpEntity<RestUser>(user, requestHeaders);       
 		//return restTemplate.postForObject(createUserUrl, user, String.class);		
         ResponseEntity<ApiModel> response = restTemplate.exchange(createUserUrl, HttpMethod.POST, requestEntity, ApiModel.class);
-        System.out.println("Final Responce == > "+ response);
-        if(response != null)
-        {
-        	result = response.getBody().getStatus();
-        }
-        return result;
+        System.out.println("Final Responce == > "+ response);        
+        return response.getBody();
+       
 	}
 	
 	public String createUser1(RestUser user)
@@ -111,7 +111,8 @@ public class ArticleClient
 		uriVariables.put("userId", userId);
 		System.out.println("userId v= " + userId);
 		String versionDate = "2013-06-01";
-		String token  = getOnlineToken("sachin");
+		String token  = getOnlineToken("sachin1");
+		System.out.println("token :::::::::::: == >"+token);
 		//String result = null;
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
         requestHeaders.add("versioDate", versionDate);
@@ -124,9 +125,9 @@ public class ArticleClient
 	}
 	public String updateUser(RestUser user)
 	{
-		String versionDate = null;//"2013-01-01";
+		String versionDate ="2013-06-01";
 		String result = null;
-		String token  = getOnlineToken("sachin");
+		String token  = getOnlineToken("sachin1");
 		System.out.println("getID =====>"+user.getUserId());
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
         requestHeaders.add("versioDate", versionDate);
@@ -136,6 +137,7 @@ public class ArticleClient
         ResponseEntity<ApiModel> response = restTemplate.exchange(updateUserUrl, HttpMethod.POST, requestEntity, ApiModel.class);
         if(response != null)
         {
+        	System.out.println("Responce ::::::::::::::: == > "+response.getBody().getObject());
         	result = response.getBody().getStatus();
         }
         return result;
@@ -147,7 +149,7 @@ public class ArticleClient
 		uriVariables.put("userId", userId);
 		System.out.println("userId v= " + userId);
 		String versionDate = "2013-06-01";
-		//String token  = "eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIxLmI1YTVjMjA3LTNhNDEtNDhkOC1hNjEyLWQwZDFmODRlYWE4MSIsImF1ZCI6ImNvbW1lcmNlIiwicHJuIjoic2FjaGluIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVzZXIiXX19.BS_x66HwQbkPoa4OxIMFg2nd4zk_JPvW2utH2DVFn2n6EfjZiLx1pfyiFlkxQlDFOhTlBYoMG-etBzyrVM2iUMqnTcgZ2DDETh8nCo4i9DE_aN7vRc80XKsszKbP6-RtibHbD2GthicOOt87lT-ZKx16zqG3SfIZR5EWdO_L2Po";
+		//String token  = "eyJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIyLjJlMDJkMjBlLTJkMzItNDFhMy1hMDZlLTBjNGQyODg4YjU5NiIsImF1ZCI6ImNvbW1lcmNlIiwicHJuIjoic2FjaGluIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbInVzZXIiXX19.D4QPOMigsc1K40Loc0T77L5F0RlGCQcqdvnagIb5M_k9Havlz0yNbBu0nv9pRZb9KnAcHR2uccpBDcKHrPcBmBztCP_bADclNSwwIpXrSduJTrTj7oJLSQDPrGTSBOimIkGOQq2MunFQQD8YW31E4zN_jr9LHIe5_lWeXmA-4hQ";//getOnlineToken("sachin");		
 		String token  = getOnlineToken("sachin");
 		//String result = null;
         MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
@@ -160,10 +162,24 @@ public class ArticleClient
 		//return restTemplate.getForObject(deleteUrl, String.class, id);
 	}
 	
+	public String pushService(String message)
+	{
+		Map<String, String> uriVariables = new HashMap<String, String>();
+		uriVariables.put("message", message);
+		String token  = getOnlineToken("tarun");
+		//String result = null;
+        MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
+        requestHeaders.add("token", token);
+        HttpEntity requestEntity = new HttpEntity(requestHeaders);       
+		//return restTemplate.postForObject(createUserUrl, user, String.class);		
+        ResponseEntity<ApiModel> response= restTemplate.exchange(pushUrl, HttpMethod.GET, requestEntity, ApiModel.class, uriVariables);               
+        return response.getBody().getStatus();
+		//return restTemplate.getForObject(deleteUrl, String.class, id);
+	}
+	
 	public String getOnlineToken(String userName)
 	{
-		trustSelfSignedSSL();
-		
+		trustSelfSignedSSL();		
 		MappingJacksonHttpMessageConverter messageConverter = (MappingJacksonHttpMessageConverter)restTemplate.getMessageConverters().get(0);
 		StringHttpMessageConverter stringMsgConverter = (StringHttpMessageConverter)restTemplate.getMessageConverters().get(1);
 		List<HttpMessageConverter<?>> converters = restTemplate.getMessageConverters();
@@ -172,16 +188,18 @@ public class ArticleClient
 		Map<String, String> uriVariables = new HashMap<String, String>();
 		uriVariables.put("param", userName);
 		System.out.println("getOnlineToken + ===> userName v= " + userName);		
-        //MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
-        //HttpEntity requestEntity = new HttpEntity(requestHeaders);       
-		//return restTemplate.postForObject(createUserUrl, user, String.class);        
-        String response = restTemplate.getForObject(getOnlineTokenUrl, String.class, uriVariables);
+        // for header param 
+		 MultiValueMap<String, String> requestHeaders = new LinkedMultiValueMap<String, String>();
+	     requestHeaders.add("deviceToken", "64a383f0 84ee1d6d 5c2f8119 1bd4f8f4 d36f26f4 4a214821 7987c3d6 26907f8e");	       
+	     HttpEntity requestEntity = new HttpEntity(requestHeaders); 
+       // HashMap response = restTemplate.getForObject(getOnlineTokenUrl, HashMap.class, uriVariables);
+	     ResponseEntity<HashMap> response = restTemplate.exchange(getOnlineTokenUrl, HttpMethod.GET, requestEntity, HashMap.class, uriVariables);
         messageConverter = (MappingJacksonHttpMessageConverter)restTemplate.getMessageConverters().get(1);
 		stringMsgConverter = (StringHttpMessageConverter)restTemplate.getMessageConverters().get(0);
 		converters = restTemplate.getMessageConverters();
 		converters.set(0, messageConverter);
 		converters.set(1, stringMsgConverter);
-        return response;
+        return (String) response.getBody().get("token");
 		//return restTemplate.getForObject(deleteUrl, String.class, id);
         
 	}

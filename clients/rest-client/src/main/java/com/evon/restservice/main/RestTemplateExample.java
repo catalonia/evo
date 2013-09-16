@@ -22,49 +22,59 @@ public class RestTemplateExample
 		//createRestUser();		
 		//getUserById();
 		//updateUser();
-		deleteUser();		
+		//deleteUser();		
 		//getOnlineToken();
+		pushService();
 		
 	}
 	
 	
 	
-	private static void getOnlineToken() {
+	private static void getOnlineToken() 
+	{
 		// TODO Auto-generated method stub
-		Object responce = articleClient.getOnlineToken("sachin12");
+		String responce = articleClient.getOnlineToken("deep");
 		System.out.println("getOnlineToken :::::::-- > "+ responce);
+		
+	}
+	private static void pushService() 
+	{
+		// TODO Auto-generated method stub
+		String responce = articleClient.pushService("Tarun Notification");
+		System.out.println("pushService :::::::-- > "+ responce);
 		
 	}
 
 	public static void createRestUser()
 	{
 		RestUser user = new RestUser();
-		user.setFirstName("fname1");
-		user.setMiddleName("mname2");
-		user.setLastName("lname3");
-		String resultStatus = articleClient.createUser(user);
-		System.out.println("Result::::::::----:= " + resultStatus);
+		user.setFirstName("push12");
+		user.setMiddleName("noti2222");
+		user.setLastName("fication11111");
+		//user.setAddress("America");
+		ApiModel resultStatus = articleClient.createUser(user);
+		System.out.println("Result::::::::----:= " + resultStatus.getObject());
 	}
 	
 	
 	public static void getUserById()
 	{
-		ApiModel resultStatus=articleClient.getSUserById("20");
+		ApiModel resultStatus=articleClient.getSUserById("79");
 		System.out.println("First Name -> ::::"+resultStatus.getObject());
 	}
 	public static void updateUser()
 	{
 		RestUser user = new RestUser();
-		user.setUserId(18);
-		user.setFirstName("amam");
-		user.setMiddleName("kumar111");
-		user.setLastName("sharma111");			
+		user.setUserId(59);
+		user.setFirstName("ami1");
+		user.setMiddleName("kuma");
+		user.setLastName("tiriphati11");			
 		String resultStatus = articleClient.updateUser(user);
 		System.out.println("Result:= " + resultStatus);
 	}
 	public static void deleteUser()
 	{
-		String resultStatus=articleClient.deleteUser("20");
+		String resultStatus=articleClient.deleteUser("59");
 		System.out.println("Result in jsopn ::::---"+resultStatus);
 	}
 }

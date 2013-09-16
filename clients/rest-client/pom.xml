@@ -110,12 +110,19 @@
 	</dependencies>
 
 	<!-- Add the Spring Maven Repositories to this project -->
-	<repositories>
+	<!--<repositories>
 		<repository>
 			<id>com.springsource.repository.bundles.release</id>
 			<name>SpringSource Enterprise Bundle Repository - Release</name>
 			<url>http://repository.springsource.com/maven/bundles/release</url>
 		</repository>
-	</repositories>
+	</repositories> -->
+	<repositories>
+	<repository>
+    <id>com.springsource.repository.bundles.external</id>
+    <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
+    <url>http://repository.springsource.com/maven/bundles/external</url>
+</repository>
+</repositories>
 
 </project>

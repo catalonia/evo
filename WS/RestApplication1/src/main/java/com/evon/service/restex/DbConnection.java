@@ -26,7 +26,7 @@ public class DbConnection {
 		return connection;
 	}
 	
-	public void insertUser(UserBean user)
+	public synchronized int insertUser(UserBean user)
 	{
 		System.out.println("insert beansssssss:::::::");
 	    connection=getConnection();
@@ -43,7 +43,28 @@ public class DbConnection {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	  
+	  return getLastId();
+	}
+	
+	public int getLastId()
+	{
+		connection=getConnection();
+		int insertId = 0;
+		try{
+			String query = "SELECT MAX(ID) FROM users";
+			preparedStatement = connection.prepareStatement(query);
+			ResultSet rs = preparedStatement.executeQuery();  
+			if (rs.next())  
+			{  
+				insertId = rs.getInt(1);//getLong("last_insert_id()");    
+				System.out.println("LastId::::::::::::::::::  == > "+insertId);
+			}  
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return insertId;
 	}
 	public UserBean getUserDetail(int id)
 	{

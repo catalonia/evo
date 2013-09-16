@@ -34,9 +34,12 @@ public class RestServices {
 		
 		log.debug("In create usere of reast easy VERSION IS == > " +versionName.getVersionName() );
 		dbConnection=new DbConnection();
-		dbConnection.insertUser(user);
-		String result = "sucess";
-		return Response.status(200).entity(result).build();
+		int userId = dbConnection.insertUser(user);
+		//int userId = dbConnection.getLastId();
+		log.debug("LAST INSERTED ID ::::::>>>>> "+userId);;
+		user.setUserId(userId);		
+		//String result = "sucess";
+		return Response.status(200).entity(user).build();
  
 	}
 	
@@ -49,6 +52,7 @@ public class RestServices {
         log.debug("In getUserById of reast easy VERSION IS == > " +versionName.getVersionName() );
         dbConnection=new DbConnection();
 		UserBean user =dbConnection.getUserDetail(userId);
+		user.setUserId(userId);
 		System.out.println("getUserById ::::---"+ user);
 		return Response.status(200).entity(user).build();
  
@@ -76,5 +80,20 @@ public class RestServices {
 		 return Response.status(200).entity(result).build();
  
 	}
-
+    /*
+     * getAllUser
+     */
+	@GET
+	@Path("getUserById")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllUser(@QueryParam("userId") int userId) {
+		
+       
+        log.debug("In getUserById of reast easy VERSION IS == > " +versionName.getVersionName() );
+        dbConnection=new DbConnection();
+		UserBean user =dbConnection.getAllUserDetail(userId);
+		System.out.println("getUserById ::::---"+ user);
+		return Response.status(200).entity(user).build();
+ 
+	}
 }
