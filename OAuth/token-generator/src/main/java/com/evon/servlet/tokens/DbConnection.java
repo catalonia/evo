@@ -27,12 +27,12 @@ public class DbConnection {
 		return connection;
 	}
 	
-	public void insertTokens(String  token, String user_name, Timestamp time)
+	public void insertTokens(String  token, String user_name, Timestamp time, String deviceToken)
 	{
 	   
 	   System.out.println("insert beansssssss:::::::");
 	   connection=getConnection();		  
-	   String insertSQL = "INSERT INTO tokens (access_token,user_name,expiration_time) VALUES (?,?,?)";
+	   String insertSQL = "INSERT INTO tokens (access_token,user_name,expiration_time,device_token) VALUES (?,?,?,?)";
 	   try 
 	   {
 		    System.out.println("INSERTING----------   "+token);
@@ -41,6 +41,7 @@ public class DbConnection {
 			preparedStatement.setString(1, token);
 			preparedStatement.setString(2, user_name);
 			preparedStatement.setTimestamp(3,time);
+			preparedStatement.setString(4,deviceToken);
 		    preparedStatement.executeUpdate();
 		} 
 	   catch (SQLException e) 
@@ -54,6 +55,7 @@ public class DbConnection {
 	   
 	  
 	}
+	
 	public String checkTokenExist(String user_name)
 	{
 		connection=getConnection();
@@ -72,6 +74,10 @@ public class DbConnection {
 				if(time1.before(time2))
 				{
 					return resultSet.getString("access_token");
+				}
+				else
+				{
+					return "Token Expire";
 				}
 			}
 		}
